@@ -20,7 +20,6 @@ const CodeEditor = ({
     problemTitle = '',
     onAiHelp,
     externalOutput
-    externalOutput
 }) => {
     const { user } = useAuth(); // Needed for unique color/name in Yjs
     const { selectedLanguage: globalLanguage, setSelectedLanguage } = useLanguage();
