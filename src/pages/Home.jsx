@@ -72,7 +72,7 @@ const Home = () => {
     const [progress, setProgress] = useState(null);
 
     // Performance profile
-    const { lowPower, prefersReducedMotion } = require('../hooks/usePerformanceProfile')();
+    const { lowPower, prefersReducedMotion } = usePerformanceProfile();
     const [recentBookmarks, setRecentBookmarks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({ topics: 0, sections: 0, active: 0 });
