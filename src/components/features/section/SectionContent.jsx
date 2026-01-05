@@ -40,10 +40,10 @@ const SectionContent = ({
     topicColor,
     isDark
 }) => {
-    // Glass style for content cards
+    // Glass style for content cards - PERFORMANCE: reduced blur from 30px to 10px
     const glassSx = {
         background: isDark ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.65)',
-        backdropFilter: 'blur(30px)',
+        backdropFilter: 'blur(10px)',
         border: '1px solid',
         borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)',
         borderRadius: '24px',

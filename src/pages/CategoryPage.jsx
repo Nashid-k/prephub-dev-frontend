@@ -264,7 +264,7 @@ const CategoryPage = () => {
                                 p: 4,
                                 borderRadius: '24px',
                                 background: isDark ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.65)',
-                                backdropFilter: 'blur(30px)',
+                                backdropFilter: 'blur(10px)',
                                 border: '1px solid',
                                 borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)',
                                 boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.2)' : '0 10px 30px rgba(31, 38, 135, 0.05)',
@@ -408,7 +408,7 @@ const CategoryPage = () => {
                                                 sx={{
                                                     borderRadius: '24px',
                                                     background: isDark ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.65)',
-                                                    backdropFilter: 'blur(30px)',
+                                                    backdropFilter: 'blur(10px)',
                                                     border: '1px solid',
                                                     borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)',
                                                     boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.2)' : '0 10px 30px rgba(31, 38, 135, 0.05)',

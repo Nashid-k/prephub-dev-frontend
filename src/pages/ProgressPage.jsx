@@ -196,7 +196,7 @@ const ProgressPage = () => {
                                             ? 'rgba(30, 30, 30, 0.4)'
                                             : 'rgba(255, 255, 255, 0.65)',
                                         borderRadius: '24px',
-                                        backdropFilter: 'blur(30px)',
+                                        backdropFilter: 'blur(10px)',
                                         border: '1px solid',
                                         borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)',
                                         boxShadow: isDark ? '0 20px 40px rgba(0, 0, 0, 0.4)' : '0 20px 40px rgba(0, 0, 0, 0.1)',
@@ -258,7 +258,7 @@ const ProgressPage = () => {
                                 background: isDark
                                     ? 'rgba(30, 30, 30, 0.4)'
                                     : 'rgba(255, 255, 255, 0.65)',
-                                backdropFilter: 'blur(30px)',
+                                backdropFilter: 'blur(10px)',
                                 border: '1px solid',
                                 borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)',
                                 boxShadow: isDark
@@ -312,7 +312,7 @@ const ProgressPage = () => {
                                                     theme.palette.mode === 'dark'
                                                         ? 'rgba(30, 30, 30, 0.4)'
                                                         : 'rgba(255, 255, 255, 0.65)',
-                                                backdropFilter: 'blur(30px)',
+                                                backdropFilter: 'blur(10px)',
                                                 border: '1px solid',
                                                 borderColor: (theme) =>
                                                     theme.palette.mode === 'dark'

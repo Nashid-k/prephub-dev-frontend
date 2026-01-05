@@ -221,7 +221,7 @@ const ReviewQueuePage = () => {
                                             borderRadius: '24px',
                                             transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
                                             background: (theme) => theme.palette.mode === 'dark' ? 'rgba(30,30,30,0.4)' : 'rgba(255,255,255,0.65)',
-                                            backdropFilter: 'blur(30px)',
+                                            backdropFilter: 'blur(10px)',
                                             border: '1px solid',
                                             borderColor: isOverdue
                                                 ? 'error.main'

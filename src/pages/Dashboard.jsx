@@ -500,7 +500,7 @@ const Dashboard = () => {
                                                 borderColor: theme.palette.mode === 'dark'
                                                     ? 'rgba(255, 255, 255, 0.08)'
                                                     : 'rgba(255, 255, 255, 0.5)',
-                                                backdropFilter: 'blur(30px)',
+                                                backdropFilter: 'blur(10px)',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 width: { xs: '100%', md: 'auto' },

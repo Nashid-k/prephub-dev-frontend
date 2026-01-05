@@ -279,7 +279,7 @@ const BookmarksPage = () => {
                                                     theme.palette.mode === 'dark'
                                                         ? 'rgba(30, 30, 30, 0.4)'
                                                         : 'rgba(255, 255, 255, 0.65)',
-                                                backdropFilter: 'blur(30px)',
+                                                backdropFilter: 'blur(10px)',
                                                 border: '1px solid',
                                                 borderColor: (theme) =>
                                                     theme.palette.mode === 'dark'
@@ -488,7 +488,7 @@ const BookmarksPage = () => {
                                     theme.palette.mode === 'dark'
                                         ? 'rgba(30, 30, 30, 0.4)'
                                         : 'rgba(255, 255, 255, 0.65)',
-                                backdropFilter: 'blur(30px)',
+                                backdropFilter: 'blur(10px)',
                                 border: '1px solid',
                                 borderColor: (theme) =>
                                     theme.palette.mode === 'dark'

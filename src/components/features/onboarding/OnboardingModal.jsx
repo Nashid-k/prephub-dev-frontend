@@ -258,7 +258,7 @@ const OnboardingModal = ({ open, onComplete, onSkip, initialStep = 1, currentPat
             PaperProps={{
                 sx: {
                     bgcolor: isDark ? 'rgba(15, 15, 20, 0.85)' : 'rgba(255, 255, 255, 0.95)',
-                    backdropFilter: 'blur(30px)',
+                    backdropFilter: 'blur(10px)',
                     border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
                     borderRadius: isMobile ? 0 : '32px',
                     boxShadow: isDark ? '0 40px 80px rgba(0,0,0,0.5)' : '0 20px 60px rgba(0,0,0,0.1)',

@@ -317,7 +317,7 @@ const Home = () => {
                                 : 'rgba(255, 255, 255, 0.65)',
                             border: '1px solid',
                             borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.5)',
-                            backdropFilter: lowPower ? 'none' : 'blur(30px)',
+                            backdropFilter: lowPower ? 'none' : 'blur(10px)',
                             boxShadow: lowPower ? '0 6px 14px rgba(0,0,0,0.06)' : (isDark ? '0 20px 60px rgba(0,0,0,0.4)' : '0 20px 60px rgba(0,0,0,0.1)'),
                             position: 'relative',
                             overflow: 'hidden'
@@ -366,7 +366,7 @@ const Home = () => {
                                                 bgcolor: isDark ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.65)',
                                                 border: '1px solid',
                                                 borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.5)',
-                                                backdropFilter: lowPower ? 'none' : 'blur(30px)',
+                                                backdropFilter: lowPower ? 'none' : 'blur(10px)',
                                                 boxShadow: lowPower ? '0 6px 14px rgba(0,0,0,0.06)' : (isDark ? '0 10px 30px rgba(0,0,0,0.2)' : '0 10px 30px rgba(31, 38, 135, 0.05)'),
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -444,7 +444,7 @@ const Home = () => {
                                             borderRadius: '24px',
                                             border: '1px solid',
                                             borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.5)',
-                                            backdropFilter: 'blur(30px)',
+                                            backdropFilter: 'blur(10px)',
                                             boxShadow: isDark ? '0 20px 60px rgba(0,0,0,0.4)' : '0 20px 60px rgba(0,0,0,0.1)',
                                             display: 'flex',
                                             flexDirection: { xs: 'column', md: 'row' },
@@ -725,7 +725,7 @@ const Home = () => {
                                                                 borderColor: isDark
                                                                     ? 'rgba(255, 255, 255, 0.08)'
                                                                     : 'rgba(255, 255, 255, 0.5)',
-                                                                backdropFilter: 'blur(30px)',
+                                                                backdropFilter: 'blur(10px)',
                                                                 textAlign: 'center',
                                                                 transition: 'all 0.3s',
                                                                 '&:hover': {
@@ -820,7 +820,7 @@ const Home = () => {
                                             theme.palette.mode === 'dark'
                                                 ? 'rgba(30, 30, 30, 0.4)'
                                                 : 'rgba(255, 255, 255, 0.65)',
-                                        backdropFilter: 'blur(30px)',
+                                        backdropFilter: 'blur(10px)',
                                         border: '1px solid',
                                         borderColor: (theme) =>
                                             theme.palette.mode === 'dark'

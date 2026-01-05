@@ -151,7 +151,7 @@ const Navbar = () => {
                                     theme.palette.mode === 'dark'
                                         ? 'rgba(30, 30, 30, 0.4)'
                                         : 'rgba(255, 255, 255, 0.65)',
-                                backdropFilter: 'blur(30px) saturate(180%)',
+                                backdropFilter: 'blur(10px) saturate(180%)',
                                 border: '1px solid',
                                 borderColor: (theme) =>
                                     theme.palette.mode === 'dark'
@@ -376,7 +376,7 @@ const Navbar = () => {
                                                         theme.palette.mode === 'dark'
                                                             ? 'rgba(30, 30, 30, 0.4)'
                                                             : 'rgba(255, 255, 255, 0.65)',
-                                                    backdropFilter: 'blur(30px)',
+                                                    backdropFilter: 'blur(10px)',
                                                     border: '1px solid',
                                                     boxShadow: (theme) =>
                                                         theme.palette.mode === 'dark'
