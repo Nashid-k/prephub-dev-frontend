@@ -163,8 +163,8 @@ const TopicCard = (props) => {
                             : (theme.palette.mode === 'dark'
                                 ? '0 20px 40px rgba(0, 0, 0, 0.4)'
                                 : '0 20px 40px rgba(31, 38, 135, 0.1)'),
-                    // Only apply heavy blur on capable devices
-                    backdropFilter: reduced ? 'none' : 'blur(30px)',
+                    // PERFORMANCE: Reduce blur from 30px to 10px, disable on reduced mode
+                    backdropFilter: reduced ? 'none' : 'blur(10px)',
                     transition: 'all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)',
                     '&:hover': {
                         transform: 'translateY(-8px)',

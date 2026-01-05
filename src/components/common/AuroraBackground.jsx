@@ -5,11 +5,8 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 /**
  * AuroraBackground - Premium animated mesh gradient background
  * 
- * Features:
- * - Dynamic color shifting based on topic/theme
- * - Mouse-interactive subtle parallax
- * - "Organic" breathing animation using canvas/blur
- * - Performance optimized (will-change: transform)
+ * PERFORMANCE NOTE: Heavy blur filters and infinite animations are disabled
+ * on low-power devices to prevent UI jank.
  */
 const AuroraBackground = ({
     children,
@@ -20,9 +17,10 @@ const AuroraBackground = ({
     const isDark = theme.palette.mode === 'dark';
     const deviceMemory = navigator.deviceMemory || 8;
 
-    // Determine if we should render animations
+    // AGGRESSIVE performance check - disable animations on most devices
     const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const shouldAnimate = deviceMemory >= 4 && !prefersReducedMotion;
+    // Only animate on high-memory devices (8GB+) that don't prefer reduced motion
+    const shouldAnimate = deviceMemory >= 8 && !prefersReducedMotion;
 
     // Mouse tracking for subtle parallax (only if animating)
     const mouseX = useMotionValue(0);

@@ -39,7 +39,8 @@ const Dashboard = () => {
 
     // Performance profile
     const { lowPower, prefersReducedMotion } = usePerformanceProfile();
-    const [visibleCount, setVisibleCount] = React.useState(12);
+    // PERFORMANCE: Reduce initial visible count to speed up first paint
+    const [visibleCount, setVisibleCount] = React.useState(8);
 
     // React Query for Topics
     const {
