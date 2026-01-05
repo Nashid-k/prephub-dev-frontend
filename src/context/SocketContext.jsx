@@ -11,12 +11,26 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState(0);
     const [totalVisitors, setTotalVisitors] = useState(0);
+    const [shouldConnect, setShouldConnect] = useState(false);
 
     const SOCKET_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     // Remove /api if present for socket connection which usually connects to root
     const baseUrl = SOCKET_URL.endsWith('/api') ? SOCKET_URL.slice(0, -4) : SOCKET_URL;
 
+    // Defer socket connection by 3 seconds after auth to prioritize UI rendering
     useEffect(() => {
+        if (user && token) {
+            const timer = setTimeout(() => setShouldConnect(true), 3000);
+            return () => clearTimeout(timer);
+        } else {
+            setShouldConnect(false);
+        }
+    }, [user, token]);
+
+    useEffect(() => {
+        // Don't connect until deferred timer fires
+        if (!shouldConnect) return;
+
         // Init socket
         const newSocket = io(baseUrl, {
             auth: {
@@ -39,7 +53,7 @@ export const SocketProvider = ({ children }) => {
         return () => {
             newSocket.disconnect();
         };
-    }, [token, baseUrl]);
+    }, [shouldConnect, token, baseUrl]);
 
     return (
         <SocketContext.Provider value={{ socket, onlineUsers, totalVisitors }}>
