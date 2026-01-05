@@ -8,6 +8,7 @@ import TopicCard from '../components/features/dashboard/TopicCard';
 import DashboardHeader from '../components/features/dashboard/DashboardHeader';
 import GreetingHeader from '../components/features/dashboard/GreetingHeader';
 import SmartSuggestion from '../components/features/dashboard/SmartSuggestion';
+import LazyTopicCard from '../components/features/dashboard/LazyTopicCard';
 import GlobalLoader from '../components/common/GlobalLoader';
 import Walkthrough from '../components/features/onboarding/Walkthrough';
 import OnboardingModal from '../components/features/onboarding/OnboardingModal';
