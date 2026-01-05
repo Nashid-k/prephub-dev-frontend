@@ -14,7 +14,7 @@ import { getTopicColor } from '../utils/topicMetadata';
 
 // Components
 import GlobalLoader from '../components/common/GlobalLoader';
-import AuroraBackground from '../components/common/AuroraBackground';
+import StaticBackground from '../components/common/StaticBackground';
 import SectionHeader from '../components/features/section/SectionHeader';
 import SectionNavigation from '../components/features/section/SectionNavigation';
 import SectionContent from '../components/features/section/SectionContent';
@@ -289,7 +289,7 @@ const SectionPage = () => {
     );
 
     return (
-        <AuroraBackground color={topicColor}>
+        <StaticBackground accentColor={topicColor}>
             <Box sx={{
                 minHeight: '100vh',
                 pt: { xs: 10, md: 12 },
@@ -375,7 +375,7 @@ const SectionPage = () => {
                     isLoading={aiModalLoading}
                 />
             </Box>
-        </AuroraBackground>
+        </StaticBackground>
     );
 };
 

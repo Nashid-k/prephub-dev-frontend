@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Container, Typography, Box, Button, Alert, useTheme as useMuiTheme, Grid, Skeleton, Chip } from '@mui/material';
 import { Refresh, School, Code, Storage, Cloud, Psychology, TrendingUp, Timer, EmojiEvents, Computer, Architecture, Handyman, ArrowForward } from '@mui/icons-material';
 import { curriculumAPI } from '../services/api';
@@ -18,7 +17,7 @@ import axios from 'axios';
 import { getStreakData } from '../utils/streakTracker';
 import './Dashboard.css';
 import { generateSmartPath, getNextRecommendation } from '../utils/SmartCurriculum';
-import AuroraBackground from '../components/common/AuroraBackground';
+import StaticBackground from '../components/common/StaticBackground';
 import usePerformanceProfile from '../hooks/usePerformanceProfile';
 
 const Dashboard = () => {
@@ -368,7 +367,7 @@ const Dashboard = () => {
     }
 
     return (
-        <AuroraBackground>
+        <StaticBackground>
             <Box sx={{ minHeight: 'calc(100vh - 100px)', py: 6 }}>
                 <Container maxWidth="xl">
                     <OnboardingModal
@@ -379,425 +378,381 @@ const Dashboard = () => {
                         currentPathId={selectedPath === 'all' ? null : selectedPath}
                     />
                     <Walkthrough run={runTour} onClose={handleTourClose} />
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-                    >
-                        <Box sx={{ minHeight: '100vh', pb: 8, bgcolor: 'background.default' }}>
-                            <Box
-                                sx={{
-                                    pt: { xs: 4, md: 12 },
-                                    pb: { xs: 4, md: 8 },
-                                    px: 3,
-                                    textAlign: 'center',
-                                    background: theme.palette.mode === 'dark'
-                                        ? 'radial-gradient(circle at top left, rgba(10,132,255,0.15), transparent 40%), radial-gradient(circle at bottom right, rgba(94,92,230,0.1), transparent 40%)'
-                                        : 'radial-gradient(circle at top left, rgba(10,132,255,0.08), transparent 40%), radial-gradient(circle at bottom right, rgba(94,92,230,0.05), transparent 40%)',
-                                }}
-                            >
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    {/* Removed motion.div wrapper for performance */}
+                    <Box sx={{ minHeight: '100vh', pb: 8 }}>
+                        <Box
+                            sx={{
+                                pt: { xs: 4, md: 12 },
+                                pb: { xs: 4, md: 8 },
+                                px: 3,
+                                textAlign: 'center',
+                                background: theme.palette.mode === 'dark'
+                                    ? 'radial-gradient(circle at top left, rgba(10,132,255,0.15), transparent 40%), radial-gradient(circle at bottom right, rgba(94,92,230,0.1), transparent 40%)'
+                                    : 'radial-gradient(circle at top left, rgba(10,132,255,0.08), transparent 40%), radial-gradient(circle at bottom right, rgba(94,92,230,0.05), transparent 40%)',
+                            }}
+                        >
+                            <div>
+                                <Typography
+                                    variant="h2"
+                                    component="h1"
+                                    sx={{
+                                        fontWeight: 800,
+                                        mb: 2,
+                                        background: theme.palette.mode === 'dark'
+                                            ? 'linear-gradient(135deg, #fff 30%, #aaa 100%)'
+                                            : 'linear-gradient(135deg, #1a1a1a 30%, #4a4a4a 100%)',
+                                        WebkitBackgroundClip: 'text',
+                                        WebkitTextFillColor: 'transparent',
+                                        fontSize: { xs: '2rem', md: '4rem' }
+                                    }}
                                 >
-                                    <Typography
-                                        variant="h2"
-                                        component="h1"
+                                    Your Curriculum
+                                </Typography>
+                            </div>
+                            <div>
+                                <Typography
+                                    variant="h6"
+                                    color="text.secondary"
+                                    sx={{
+                                        maxWidth: '600px',
+                                        mx: 'auto',
+                                        mb: 6,
+                                        lineHeight: 1.6,
+                                        fontWeight: 400
+                                    }}
+                                >
+                                    Master the foundations of computer science and software engineering with our structured learning paths.
+                                </Typography>
+                            </div>
+
+                            {/* AI Strategy Display */}
+                            {aiStrategy && (
+                                <div>
+                                    <Box
                                         sx={{
-                                            fontWeight: 800,
-                                            mb: 2,
+                                            maxWidth: '700px',
+                                            mx: 'auto',
+                                            mb: 4,
+                                            p: { xs: 1.5, md: 1.5 },
+                                            pr: { xs: 1.5, md: 2.5 },
+                                            borderRadius: '16px',
                                             background: theme.palette.mode === 'dark'
-                                                ? 'linear-gradient(135deg, #fff 30%, #aaa 100%)'
-                                                : 'linear-gradient(135deg, #1a1a1a 30%, #4a4a4a 100%)',
-                                            WebkitBackgroundClip: 'text',
-                                            WebkitTextFillColor: 'transparent',
-                                            fontSize: { xs: '2rem', md: '4rem' }
+                                                ? 'rgba(10, 132, 255, 0.1)'
+                                                : 'rgba(10, 132, 255, 0.05)',
+                                            border: '1px solid',
+                                            borderColor: theme.palette.mode === 'dark'
+                                                ? 'rgba(10, 132, 255, 0.2)'
+                                                : 'rgba(10, 132, 255, 0.1)',
+                                            display: 'flex',
+                                            alignItems: 'start',
+                                            gap: 2,
+                                            textAlign: 'left'
                                         }}
                                     >
-                                        Your Curriculum
-                                    </Typography>
-                                </motion.div>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.6, delay: 0.1 }}
-                                >
-                                    <Typography
-                                        variant="h6"
-                                        color="text.secondary"
+                                        <Box sx={{ mt: 0.5 }}>
+                                            <Psychology fontSize="medium" sx={{ color: '#0a84ff' }} />
+                                        </Box>
+                                        <Box>
+                                            <Typography variant="subtitle2" sx={{ color: '#0a84ff', fontWeight: 700, mb: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                                                AI Learning Strategy
+                                            </Typography>
+                                            <Typography variant="body2" color="text.primary" sx={{ lineHeight: 1.6 }}>
+                                                {aiStrategy}
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </div>
+                            )}
+                            {nextRecommendation && (
+                                <div>
+                                    <Box
                                         sx={{
-                                            maxWidth: '600px',
+                                            maxWidth: '800px',
                                             mx: 'auto',
                                             mb: 6,
-                                            lineHeight: 1.6,
-                                            fontWeight: 400
+                                            p: 3,
+                                            borderRadius: '32px',
+                                            background: theme.palette.mode === 'dark'
+                                                ? 'rgba(30, 30, 30, 0.4)'
+                                                : 'rgba(255, 255, 255, 0.65)',
+                                            border: '1px solid',
+                                            borderColor: theme.palette.mode === 'dark'
+                                                ? 'rgba(255, 255, 255, 0.08)'
+                                                : 'rgba(255, 255, 255, 0.5)',
+                                            backdropFilter: 'blur(10px)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            width: { xs: '100%', md: 'auto' },
+                                            justifyContent: 'center',
+                                            mt: { xs: 1, md: 0 },
+                                            flexDirection: { xs: 'column', sm: 'row' },
+                                            gap: 2,
+                                            boxShadow: theme.palette.mode === 'dark'
+                                                ? '0 20px 40px rgba(0, 0, 0, 0.4)'
+                                                : '0 20px 40px rgba(99, 102, 241, 0.15)'
                                         }}
                                     >
-                                        Master the foundations of computer science and software engineering with our structured learning paths.
-                                    </Typography>
-                                </motion.div>
-
-                                {/* AI Strategy Display */}
-                                {aiStrategy && (
-                                    <motion.div
-                                        initial={{ opacity: 0, scale: 0.9 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.5, delay: 0.15 }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                maxWidth: '700px',
-                                                mx: 'auto',
-                                                mb: 4,
-                                                p: { xs: 1.5, md: 1.5 },
-                                                pr: { xs: 1.5, md: 2.5 },
-                                                borderRadius: '16px',
-                                                background: theme.palette.mode === 'dark'
-                                                    ? 'rgba(10, 132, 255, 0.1)'
-                                                    : 'rgba(10, 132, 255, 0.05)',
-                                                border: '1px solid',
-                                                borderColor: theme.palette.mode === 'dark'
-                                                    ? 'rgba(10, 132, 255, 0.2)'
-                                                    : 'rgba(10, 132, 255, 0.1)',
-                                                display: 'flex',
-                                                alignItems: 'start',
-                                                gap: 2,
-                                                textAlign: 'left'
-                                            }}
-                                        >
-                                            <Box sx={{ mt: 0.5 }}>
-                                                <Psychology fontSize="medium" sx={{ color: '#0a84ff' }} />
-                                            </Box>
-                                            <Box>
-                                                <Typography variant="subtitle2" sx={{ color: '#0a84ff', fontWeight: 700, mb: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                                    AI Learning Strategy
-                                                </Typography>
-                                                <Typography variant="body2" color="text.primary" sx={{ lineHeight: 1.6 }}>
-                                                    {aiStrategy}
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-                                    </motion.div>
-                                )}
-                                {nextRecommendation && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.5, delay: 0.2 }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                maxWidth: '800px',
-                                                mx: 'auto',
-                                                mb: 6,
-                                                p: 3,
-                                                borderRadius: '32px',
-                                                background: theme.palette.mode === 'dark'
-                                                    ? 'rgba(30, 30, 30, 0.4)'
-                                                    : 'rgba(255, 255, 255, 0.65)',
-                                                border: '1px solid',
-                                                borderColor: theme.palette.mode === 'dark'
-                                                    ? 'rgba(255, 255, 255, 0.08)'
-                                                    : 'rgba(255, 255, 255, 0.5)',
-                                                backdropFilter: 'blur(10px)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                width: { xs: '100%', md: 'auto' },
-                                                justifyContent: 'center',
-                                                mt: { xs: 1, md: 0 },
-                                                flexDirection: { xs: 'column', sm: 'row' },
-                                                gap: 2,
-                                                boxShadow: theme.palette.mode === 'dark'
-                                                    ? '0 20px 40px rgba(0, 0, 0, 0.4)'
-                                                    : '0 20px 40px rgba(99, 102, 241, 0.15)'
-                                            }}
-                                        >
-                                            <Box sx={{ textAlign: 'left', flex: 1 }}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                                                    <Chip
-                                                        label="AI Recommended Next Step"
-                                                        size="small"
-                                                        sx={{
-                                                            bgcolor: '#6366f1',
-                                                            color: '#fff',
-                                                            fontWeight: 700,
-                                                            fontSize: '0.75rem'
-                                                        }}
-                                                    />
-                                                </Box>
-                                                <Typography variant="h5" fontWeight={700} sx={{ mb: 0.5 }}>
-                                                    {nextRecommendation.name}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {nextRecommendation.description}
-                                                </Typography>
-                                            </Box>
-                                            <Button
-                                                component={Link}
-                                                to={nextRecommendation.customLink || `/topic/${nextRecommendation.slug}`}
-                                                variant="contained"
-                                                size="large"
-                                                endIcon={<ArrowForward />}
-                                                sx={{
-                                                    borderRadius: '9999px',
-                                                    bgcolor: '#6366f1',
-                                                    whiteSpace: 'nowrap',
-                                                    flexShrink: 0,
-                                                    '&:hover': {
-                                                        bgcolor: '#4f46e5',
-                                                        transform: 'translateY(-2px)',
-                                                        boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
-                                                    }
-                                                }}
-                                            >
-                                                Start Learning
-                                            </Button>
-                                        </Box>
-                                    </motion.div>
-                                )}
-                                <Box id="dashboard-header" sx={{ mb: 6 }}>
-                                    <GreetingHeader user={user} streak={stats} />
-
-                                    <Grid container spacing={3} sx={{ mb: 4 }}>
-                                        {/* Primary Recommendation (AI or Logical) */}
-                                        {(aiSuggestion || nextRecommendation) && (
-                                            <Grid item xs={12} md={7} lg={8}>
-                                                <SmartSuggestion
-                                                    suggestion={aiSuggestion || nextRecommendation}
-                                                    type={aiSuggestion ? "ai" : "next"}
+                                        <Box sx={{ textAlign: 'left', flex: 1 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                                <Chip
+                                                    label="AI Recommended Next Step"
+                                                    size="small"
+                                                    sx={{
+                                                        bgcolor: '#6366f1',
+                                                        color: '#fff',
+                                                        fontWeight: 700,
+                                                        fontSize: '0.75rem'
+                                                    }}
                                                 />
-                                            </Grid>
-                                        )}
-
-                                        {/* Secondary / Resume (Placeholder for now, or last active) */}
-                                        {/* We can add a "Resume" card here later if we track last_active_topic separately */}
-                                    </Grid>
-
-                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                                        <Box>
-                                            <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
-                                                Your Path
+                                            </Box>
+                                            <Typography variant="h5" fontWeight={700} sx={{ mb: 0.5 }}>
+                                                {nextRecommendation.name}
                                             </Typography>
                                             <Typography variant="body2" color="text.secondary">
-                                                {learningPaths[selectedPath]?.name || 'Custom Path'}
+                                                {nextRecommendation.description}
                                             </Typography>
                                         </Box>
                                         <Button
-                                            onClick={() => setShowOnboarding(true)}
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{ borderRadius: '12px', textTransform: 'none' }}
+                                            component={Link}
+                                            to={nextRecommendation.customLink || `/topic/${nextRecommendation.slug}`}
+                                            variant="contained"
+                                            size="large"
+                                            endIcon={<ArrowForward />}
+                                            sx={{
+                                                borderRadius: '9999px',
+                                                bgcolor: '#6366f1',
+                                                whiteSpace: 'nowrap',
+                                                flexShrink: 0,
+                                                '&:hover': {
+                                                    bgcolor: '#4f46e5',
+                                                    transform: 'translateY(-2px)',
+                                                    boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
+                                                }
+                                            }}
                                         >
-                                            Change Path
+                                            Start Learning
                                         </Button>
                                     </Box>
+                                </div>
+                            )}
+                            <Box id="dashboard-header" sx={{ mb: 6 }}>
+                                <GreetingHeader user={user} streak={stats} />
 
-                                </Box>
-                            </Box>
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.3 }}
-                            >
-                                <Box
-                                    sx={{
-                                        mb: 4,
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        gap: 2,
-                                        flexDirection: { xs: 'column', sm: 'row' }
-                                    }}
-                                >
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, px: 3, borderRadius: '9999px', bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider' }}>
-                                        <Typography variant="body2" color="text.secondary" fontWeight={600}>
-                                            Current Path:
+                                <Grid container spacing={3} sx={{ mb: 4 }}>
+                                    {/* Primary Recommendation (AI or Logical) */}
+                                    {(aiSuggestion || nextRecommendation) && (
+                                        <Grid item xs={12} md={7} lg={8}>
+                                            <SmartSuggestion
+                                                suggestion={aiSuggestion || nextRecommendation}
+                                                type={aiSuggestion ? "ai" : "next"}
+                                            />
+                                        </Grid>
+                                    )}
+
+                                    {/* Secondary / Resume (Placeholder for now, or last active) */}
+                                    {/* We can add a "Resume" card here later if we track last_active_topic separately */}
+                                </Grid>
+
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                                    <Box>
+                                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+                                            Your Path
                                         </Typography>
-                                        <Typography variant="body1" fontWeight={700} color="text.primary">
-                                            {learningPaths[selectedPath]?.name || 'Unknown Path'}
+                                        <Typography variant="body2" color="text.secondary">
+                                            {learningPaths[selectedPath]?.name || 'Custom Path'}
                                         </Typography>
                                     </Box>
-                                    {selectedPath !== 'all' && (
-                                        <Chip
-                                            label={`${filteredTopics.length} topics`}
-                                            size="small"
-                                            sx={{
-                                                bgcolor: '#5e5ce620',
-                                                color: '#5e5ce6',
-                                                fontWeight: 600
-                                            }}
-                                        />
-                                    )}
                                     <Button
-                                        variant="contained"
-                                        size="medium"
                                         onClick={() => setShowOnboarding(true)}
-                                        sx={{
-                                            borderRadius: '9999px',
-                                            textTransform: 'none',
-                                            fontWeight: 600,
-                                            px: 3,
-                                            background: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                                            color: theme.palette.mode === 'dark' ? '#000' : '#fff',
-                                            '&:hover': {
-                                                background: theme.palette.mode === 'dark' ? '#e0e0e0' : '#333'
-                                            }
-                                        }}
+                                        variant="outlined"
+                                        size="small"
+                                        sx={{ borderRadius: '12px', textTransform: 'none' }}
                                     >
                                         Change Path
                                     </Button>
                                 </Box>
-                            </motion.div>
+
+                            </Box>
+                        </Box>
+                        <div>
                             <Box
                                 sx={{
-                                    display: 'grid',
-                                    gridTemplateColumns: {
-                                        xs: '1fr',
-                                        sm: 'repeat(2, 1fr)',
-                                        md: 'repeat(4, 1fr)',
-                                        lg: 'repeat(4, 1fr)',
-                                        xl: 'repeat(4, 1fr)'
-                                    },
-                                    gap: 3,
-                                    maxWidth: '100%',
-                                    mx: 'auto',
-                                    px: 2
+                                    mb: 4,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    gap: 2,
+                                    flexDirection: { xs: 'column', sm: 'row' }
                                 }}
                             >
-                                {selectedPath === 'all' && (
-                                    <>
-                                        <Box sx={{ display: 'flex', height: 'auto' }}>
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3 }}
-                                                style={{ width: '100%', height: '100%' }}
-                                            >
-                                                <TopicCard
-                                                    topic={{
-                                                        _id: 'dsa-agg',
-                                                        name: 'Algorithms & Data Structures',
-                                                        description: 'Master Algorithms, Data Structures and the Blind 75 list.',
-                                                        slug: 'algorithms',
-                                                        categoryCount: 3,
-                                                        progress: 0
-                                                    }}
-                                                    customLink="/dsa"
-                                                />
-                                            </motion.div>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', height: 'auto' }}>
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3, delay: 0.1 }}
-                                                style={{ width: '100%', height: '100%' }}
-                                            >
-                                                <TopicCard
-                                                    topic={{
-                                                        _id: 'cs-funds-agg',
-                                                        name: 'CS Fundamentals',
-                                                        description: 'Operating Systems and Networking theories.',
-                                                        slug: 'operating-systems',
-                                                        icon: '💻',
-                                                        categoryCount: 2,
-                                                        progress: 0
-                                                    }}
-                                                    customLink="/cs-fundamentals"
-                                                />
-                                            </motion.div>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', height: 'auto' }}>
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3, delay: 0.2 }}
-                                                style={{ width: '100%', height: '100%' }}
-                                            >
-                                                <TopicCard
-                                                    topic={{
-                                                        _id: 'sys-design-agg',
-                                                        name: 'System Design & Architecture',
-                                                        description: 'Scalability, API Design, Security, and Reliability.',
-                                                        slug: 'system-design',
-                                                        icon: '🏗️',
-                                                        categoryCount: 6,
-                                                        progress: 0
-                                                    }}
-                                                    customLink="/system-design"
-                                                />
-                                            </motion.div>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', height: 'auto' }}>
-                                            <motion.div
-                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ duration: 0.3, delay: 0.3 }}
-                                                style={{ width: '100%', height: '100%', display: 'flex' }}
-                                            >
-                                                <TopicCard
-                                                    topic={{
-                                                        _id: 'eng-practices-agg',
-                                                        name: 'Engineering Practices',
-                                                        description: 'Testing, DevOps, Code Quality, and Product Thinking.',
-                                                        slug: 'devops-basics',
-                                                        icon: '🚀',
-                                                        categoryCount: 4,
-                                                        progress: 0
-                                                    }}
-                                                    customLink="/engineering-practices"
-                                                />
-                                            </motion.div>
-                                        </Box>
-                                    </>
-                                )}
-                                {(() => {
-                                    const visible = filteredTopics.filter(t => {
-                                        if (t.isGroup) return true;
-                                        const HIDDEN_CHILDREN = [
-                                            'algorithms', 'data-structures', 'blind-75', 'dsa',
-                                            'operating-systems', 'networking',
-                                            'system-design', 'api-design', 'security-engineering', 'reliability-observability', 'caching-performance', 'concurrency', 'concurrency-async',
-                                            'testing-strategy', 'devops-basics', 'code-quality', 'product-thinking'
-                                        ];
-                                        const CORE_GROUPS = ['algorithms-data-structures', 'cs-fundamentals', 'system-design-architecture', 'engineering-practices'];
-                                        return !HIDDEN_CHILDREN.includes(t.slug) && !CORE_GROUPS.includes(t.slug);
-                                    }).slice(0, visibleCount);
-
-                                    return visible.map((topic, index) => (
-                                        // Use LazyTopicCard for better performance
-                                        <LazyTopicCard
-                                            key={topic._id}
-                                            topic={topic}
-                                            index={index}
-                                            reduced={lowPower || prefersReducedMotion}
-                                            customLink={topic.customLink}
-                                        />
-                                    ));
-                                })()}
-                            </Box>
-                            {topics.length === 0 && !loading && !error && (
-                                <Box sx={{ textAlign: 'center', py: 8 }}>
-                                    <Typography variant="h5" color="text.secondary">
-                                        No topics available yet
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, px: 3, borderRadius: '9999px', bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider' }}>
+                                    <Typography variant="body2" color="text.secondary" fontWeight={600}>
+                                        Current Path:
+                                    </Typography>
+                                    <Typography variant="body1" fontWeight={700} color="text.primary">
+                                        {learningPaths[selectedPath]?.name || 'Unknown Path'}
                                     </Typography>
                                 </Box>
+                                {selectedPath !== 'all' && (
+                                    <Chip
+                                        label={`${filteredTopics.length} topics`}
+                                        size="small"
+                                        sx={{
+                                            bgcolor: '#5e5ce620',
+                                            color: '#5e5ce6',
+                                            fontWeight: 600
+                                        }}
+                                    />
+                                )}
+                                <Button
+                                    variant="contained"
+                                    size="medium"
+                                    onClick={() => setShowOnboarding(true)}
+                                    sx={{
+                                        borderRadius: '9999px',
+                                        textTransform: 'none',
+                                        fontWeight: 600,
+                                        px: 3,
+                                        background: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                                        color: theme.palette.mode === 'dark' ? '#000' : '#fff',
+                                        '&:hover': {
+                                            background: theme.palette.mode === 'dark' ? '#e0e0e0' : '#333'
+                                        }
+                                    }}
+                                >
+                                    Change Path
+                                </Button>
+                            </Box>
+                        </div>
+                        <Box
+                            sx={{
+                                display: 'grid',
+                                gridTemplateColumns: {
+                                    xs: '1fr',
+                                    sm: 'repeat(2, 1fr)',
+                                    md: 'repeat(4, 1fr)',
+                                    lg: 'repeat(4, 1fr)',
+                                    xl: 'repeat(4, 1fr)'
+                                },
+                                gap: 3,
+                                maxWidth: '100%',
+                                mx: 'auto',
+                                px: 2
+                            }}
+                        >
+                            {selectedPath === 'all' && (
+                                <>
+                                    <Box sx={{ display: 'flex', height: 'auto' }}>
+                                        <div>
+                                            <TopicCard
+                                                topic={{
+                                                    _id: 'dsa-agg',
+                                                    name: 'Algorithms & Data Structures',
+                                                    description: 'Master Algorithms, Data Structures and the Blind 75 list.',
+                                                    slug: 'algorithms',
+                                                    categoryCount: 3,
+                                                    progress: 0
+                                                }}
+                                                customLink="/dsa"
+                                            />
+                                        </div>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', height: 'auto' }}>
+                                        <div>
+                                            <TopicCard
+                                                topic={{
+                                                    _id: 'cs-funds-agg',
+                                                    name: 'CS Fundamentals',
+                                                    description: 'Operating Systems and Networking theories.',
+                                                    slug: 'operating-systems',
+                                                    icon: '💻',
+                                                    categoryCount: 2,
+                                                    progress: 0
+                                                }}
+                                                customLink="/cs-fundamentals"
+                                            />
+                                        </div>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', height: 'auto' }}>
+                                        <div>
+                                            <TopicCard
+                                                topic={{
+                                                    _id: 'sys-design-agg',
+                                                    name: 'System Design & Architecture',
+                                                    description: 'Scalability, API Design, Security, and Reliability.',
+                                                    slug: 'system-design',
+                                                    icon: '🏗️',
+                                                    categoryCount: 6,
+                                                    progress: 0
+                                                }}
+                                                customLink="/system-design"
+                                            />
+                                        </div>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', height: 'auto' }}>
+                                        <div>
+                                            <TopicCard
+                                                topic={{
+                                                    _id: 'eng-practices-agg',
+                                                    name: 'Engineering Practices',
+                                                    description: 'Testing, DevOps, Code Quality, and Product Thinking.',
+                                                    slug: 'devops-basics',
+                                                    icon: '🚀',
+                                                    categoryCount: 4,
+                                                    progress: 0
+                                                }}
+                                                customLink="/engineering-practices"
+                                            />
+                                        </div>
+                                    </Box>
+                                </>
                             )}
+                            {(() => {
+                                const visible = filteredTopics.filter(t => {
+                                    if (t.isGroup) return true;
+                                    const HIDDEN_CHILDREN = [
+                                        'algorithms', 'data-structures', 'blind-75', 'dsa',
+                                        'operating-systems', 'networking',
+                                        'system-design', 'api-design', 'security-engineering', 'reliability-observability', 'caching-performance', 'concurrency', 'concurrency-async',
+                                        'testing-strategy', 'devops-basics', 'code-quality', 'product-thinking'
+                                    ];
+                                    const CORE_GROUPS = ['algorithms-data-structures', 'cs-fundamentals', 'system-design-architecture', 'engineering-practices'];
+                                    return !HIDDEN_CHILDREN.includes(t.slug) && !CORE_GROUPS.includes(t.slug);
+                                }).slice(0, visibleCount);
 
-                            {filteredTopics.length > visibleCount && (
-                                <Box sx={{ textAlign: 'center', mt: 4 }}>
-                                    <Button variant="outlined" onClick={() => setVisibleCount(v => v + 12)}>
-                                        Show more topics
-                                    </Button>
-                                </Box>
-                            )}
+                                return visible.map((topic, index) => (
+                                    // Use LazyTopicCard for better performance
+                                    <LazyTopicCard
+                                        key={topic._id}
+                                        topic={topic}
+                                        index={index}
+                                        reduced={lowPower || prefersReducedMotion}
+                                        customLink={topic.customLink}
+                                    />
+                                ));
+                            })()}
                         </Box>
-                    </motion.div>
+                        {topics.length === 0 && !loading && !error && (
+                            <Box sx={{ textAlign: 'center', py: 8 }}>
+                                <Typography variant="h5" color="text.secondary">
+                                    No topics available yet
+                                </Typography>
+                            </Box>
+                        )}
+
+                        {filteredTopics.length > visibleCount && (
+                            <Box sx={{ textAlign: 'center', mt: 4 }}>
+                                <Button variant="outlined" onClick={() => setVisibleCount(v => v + 12)}>
+                                    Show more topics
+                                </Button>
+                            </Box>
+                        )}
+                    </Box>
                 </Container>
             </Box>
-        </AuroraBackground>
+        </StaticBackground>
     );
 };
 
 export default Dashboard;
+

@@ -40,23 +40,24 @@ const SectionContent = ({
     topicColor,
     isDark
 }) => {
-    // Glass style for content cards - PERFORMANCE: reduced blur from 30px to 10px
-    const glassSx = {
-        background: isDark ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.65)',
-        backdropFilter: 'blur(10px)',
+    // Card styles - PERFORMANCE: No blur, solid backgrounds
+    const cardSx = {
+        background: isDark ? '#1a1a1f' : '#ffffff',
         border: '1px solid',
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.5)',
-        borderRadius: '24px',
-        boxShadow: isDark ? '0 10px 30px rgba(0, 0, 0, 0.2)' : '0 10px 30px rgba(31, 38, 135, 0.05)',
+        borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+        borderRadius: '20px',
+        boxShadow: isDark
+            ? '0 4px 20px rgba(0,0,0,0.3)'
+            : '0 4px 20px rgba(0,0,0,0.06)',
         overflow: 'hidden',
         height: '100%',
         display: 'flex',
         flexDirection: 'column'
     };
 
-    const editorGlassSx = {
-        ...glassSx,
-        background: isDark ? 'rgba(20, 20, 20, 0.6)' : 'rgba(255, 255, 255, 0.8)',
+    const editorCardSx = {
+        ...cardSx,
+        background: isDark ? '#141418' : '#fafafa',
     };
 
     return (
@@ -89,7 +90,7 @@ const SectionContent = ({
             <Box sx={{ flex: 1, position: 'relative', minHeight: 0 }}>
                 {activeTab === 'learn' && (
                     <Box sx={{ height: '100%', pb: 2 }}>
-                        <Card sx={glassSx}>
+                        <Card sx={cardSx}>
                             {contentLoading ? (
                                 <Box sx={{ p: 4 }}>
                                     <TopicContentSkeleton />
@@ -163,7 +164,7 @@ const SectionContent = ({
                     <Box sx={{ height: '100%', display: 'flex', gap: 3, flexDirection: { xs: 'column', lg: 'row' } }}>
                         {/* Left: Problem Description */}
                         <Box sx={{ flex: 1, height: '100%' }}>
-                            <Card sx={glassSx}>
+                            <Card sx={cardSx}>
                                 <CardContent sx={{ p: 3, height: '100%', overflowY: 'auto' }}>
                                     <Typography variant="h5" fontWeight={700} gutterBottom>Problem</Typography>
                                     {contentLoading ? (
@@ -181,7 +182,7 @@ const SectionContent = ({
 
                         {/* Right: Editor */}
                         <Box sx={{ flex: 1.2, height: '100%', minHeight: 500 }}>
-                            <Card sx={editorGlassSx}>
+                            <Card sx={editorcardSx}>
                                 <Box sx={{ flex: 1, position: 'relative' }}>
                                     <Suspense fallback={<EditorSkeleton />}>
                                         <CodeEditor
@@ -203,3 +204,4 @@ const SectionContent = ({
 };
 
 export default SectionContent;
+
