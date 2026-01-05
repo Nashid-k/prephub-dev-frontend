@@ -4,6 +4,10 @@ import { Box, Button, Select, MenuItem, Typography, IconButton, Tooltip, Circula
 import { PlayArrow, CheckCircle, BugReport, Lightbulb, AutoFixHigh, ExpandMore, Code as CodeIcon } from '@mui/icons-material';
 import { trackCodeExecution } from '../../../services/analytics';
 import { useLanguage } from '../../../context/LanguageContext';
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
+import { MonacoBinding } from 'y-monaco';
+import { useAuth } from '../../../context/AuthContext';
 import './CodeEditor.css';
 
 const Editor = lazy(() => import('@monaco-editor/react'));
@@ -16,7 +20,9 @@ const CodeEditor = ({
     problemTitle = '',
     onAiHelp,
     externalOutput
+    externalOutput
 }) => {
+    const { user } = useAuth(); // Needed for unique color/name in Yjs
     const { selectedLanguage: globalLanguage, setSelectedLanguage } = useLanguage();
     const [language, setLanguage] = useState(defaultLanguage || globalLanguage);
     const [testResults, setTestResults] = useState(null);
@@ -38,14 +44,48 @@ const CodeEditor = ({
         }
     };
 
+    // Yjs Collaboration Logic
     useEffect(() => {
+        if (!editorRef.current || !problemTitle) return;
+
+        // 1. Create Yjs Document
+        const ydoc = new Y.Doc();
+
+        // 2. Connect to WebSocket Provider (100x Feature)
+        // Using the port 6001 we exposed in docker-compose
+        const wsUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:6001';
+        const roomName = `prephub-code-${problemTitle.replace(/\s+/g, '-').toLowerCase()}`;
+
+        const provider = new WebsocketProvider(wsUrl, roomName, ydoc);
+
+        // 3. Define shared type
+        const yText = ydoc.getText('monaco');
+
+        // 4. Bind Yjs to Monaco
+        // This makes the editor real-time collaborative!
+        const binding = new MonacoBinding(
+            yText,
+            editorRef.current.getModel(),
+            new Set([editorRef.current]),
+            provider.awareness
+        );
+
+        // Set user awareness (cursor color/name)
+        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        provider.awareness.setLocalStateField('user', {
+            name: user?.username || 'Guest',
+            color: randomColor
+        });
+
+        console.log(`🔗 Connected to Collab Room: ${roomName}`);
+
         return () => {
-            if (editorRef.current) {
-                editorRef.current.dispose();
-                editorRef.current = null;
-            }
+            console.log('🔌 Disconnecting Collab...');
+            binding.destroy();
+            provider.destroy();
+            ydoc.destroy();
         };
-    }, []);
+    }, [isEditorReady, problemTitle, user]); // Re-run when editor mounts
 
     useEffect(() => {
         if (externalOutput) {

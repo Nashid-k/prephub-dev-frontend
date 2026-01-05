@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { curriculumAPI } from '../services/api';
 
 /**
@@ -13,7 +13,7 @@ export const useTopics = ({ experienceLevel, isPersonalized }) => {
             const response = isPersonalized
                 ? await curriculumAPI.getPersonalizedTopics(params)
                 : await curriculumAPI.getAllTopics(params);
-            
+
             // Return the data directly for easier usage
             return response.data; // Expecting { success: true, topics: [], ... }
         },
@@ -65,5 +65,56 @@ export const useSectionAggregate = (topicSlug, sectionSlug) => {
         enabled: !!topicSlug && !!sectionSlug,
         staleTime: 1000 * 60 * 60, // 1 hour
         keepPreviousData: true,
+    });
+};
+
+/**
+ * Hook to optimistically mark section as complete
+ */
+export const useMarkSectionComplete = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async ({ topicSlug, sectionSlug }) => {
+            // Assume API exists: POST /api/progress/complete
+            // If utilizing specific API method, import it. 
+            // For now using generic post via updated API or placeholder
+            const { api } = await import('../services/api');
+            return api.post('/progress/complete', { topicSlug, sectionSlug });
+        },
+        onMutate: async ({ topicSlug, sectionSlug }) => {
+            // Cancel outgoing refetches
+            await queryClient.cancelQueries(['section-aggregate', topicSlug, sectionSlug]);
+
+            // Snapshot previous value
+            const previousData = queryClient.getQueryData(['section-aggregate', topicSlug, sectionSlug]);
+
+            // Optimistically update to new value
+            if (previousData && previousData.section) {
+                queryClient.setQueryData(['section-aggregate', topicSlug, sectionSlug], {
+                    ...previousData,
+                    section: {
+                        ...previousData.section,
+                        isCompleted: true // 100x Speed: Instant Checkmark
+                    }
+                });
+            }
+
+            return { previousData };
+        },
+        onError: (err, newTodo, context) => {
+            // Rollback on error
+            if (context?.previousData) {
+                queryClient.setQueryData(
+                    ['section-aggregate', newTodo.topicSlug, newTodo.sectionSlug],
+                    context.previousData
+                );
+            }
+        },
+        onSettled: (data, error, variables) => {
+            // Always refetch to be safe
+            queryClient.invalidateQueries(['section-aggregate', variables.topicSlug, variables.sectionSlug]);
+            queryClient.invalidateQueries(['topics']); // Update progress bars
+        },
     });
 };
