@@ -159,11 +159,14 @@ const Dashboard = () => {
         const savedPath = localStorage.getItem('prephub_learning_path');
 
         if (!hasCompletedOnboarding) {
-            setShowOnboarding(true);
+            // Only show Path Selection if the MAIN onboarding (Basic Info) is complete
+            if (user?.onboardingCompleted) {
+                setShowOnboarding(true);
+            }
         } else if (savedPath && learningPaths[savedPath]) {
             setSelectedPath(savedPath);
         }
-    }, []);
+    }, [user?.onboardingCompleted]);
 
     const handleOnboardingComplete = (pathData) => {
         setSelectedPath(pathData.id);
@@ -367,390 +370,394 @@ const Dashboard = () => {
     }
 
     return (
-        <StaticBackground>
-            <Box sx={{ minHeight: 'calc(100vh - 100px)', py: 6 }}>
-                <Container maxWidth="xl">
-                    <OnboardingModal
-                        open={showOnboarding}
-                        onComplete={handleOnboardingComplete}
-                        onSkip={handleOnboardingSkip}
-                        initialStep={onboardingStep}
-                        currentPathId={selectedPath === 'all' ? null : selectedPath}
-                    />
-                    <Walkthrough run={runTour} onClose={handleTourClose} />
-                    {/* Removed motion.div wrapper for performance */}
-                    <Box sx={{ minHeight: '100vh', pb: 8 }}>
-                        <Box
+        <Box sx={{ minHeight: 'calc(100vh - 100px)', pb: 8 }}>
+            <Container maxWidth="xl" sx={{ mt: 4, mb: 6 }}>
+                <OnboardingModal
+                    open={showOnboarding}
+                    onComplete={handleOnboardingComplete}
+                    onSkip={handleOnboardingSkip}
+                    initialStep={onboardingStep}
+                    currentPathId={selectedPath === 'all' ? null : selectedPath}
+                />
+                <Walkthrough run={runTour} onClose={handleTourClose} />
+
+                {/* Elite Header Section (Matches Home Style) */}
+                <Box
+                    sx={{
+                        p: { xs: 3, md: 6 },
+                        borderRadius: '32px',
+                        background: isDark
+                            ? 'rgba(30, 30, 30, 0.4)'
+                            : 'rgba(255, 255, 255, 0.65)',
+                        border: '1px solid',
+                        borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.5)',
+                        backdropFilter: lowPower ? 'none' : 'blur(10px)',
+                        boxShadow: lowPower ? '0 6px 14px rgba(0,0,0,0.06)' : (isDark ? '0 20px 60px rgba(0,0,0,0.4)' : '0 20px 60px rgba(0,0,0,0.1)'),
+                        position: 'relative',
+                        overflow: 'hidden',
+                        textAlign: 'center',
+                        mb: 6
+                    }}
+                >
+                    {/* Background Decor */}
+                    <Box sx={{ position: 'absolute', top: 0, right: 0, width: '40%', height: '100%', opacity: 0.1, background: 'linear-gradient(90deg, transparent, #5e5ce6)', pointerEvents: 'none' }} />
+
+                    <div style={{ position: 'relative', zIndex: 1 }}>
+                        <Typography
+                            variant="h2"
+                            component="h1"
                             sx={{
-                                pt: { xs: 4, md: 12 },
-                                pb: { xs: 4, md: 8 },
-                                px: 3,
-                                textAlign: 'center',
+                                fontWeight: 800,
+                                mb: 2,
                                 background: theme.palette.mode === 'dark'
-                                    ? 'radial-gradient(circle at top left, rgba(10,132,255,0.15), transparent 40%), radial-gradient(circle at bottom right, rgba(94,92,230,0.1), transparent 40%)'
-                                    : 'radial-gradient(circle at top left, rgba(10,132,255,0.08), transparent 40%), radial-gradient(circle at bottom right, rgba(94,92,230,0.05), transparent 40%)',
+                                    ? 'linear-gradient(135deg, #fff 30%, #aaa 100%)'
+                                    : 'linear-gradient(135deg, #1a1a1a 30%, #4a4a4a 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                fontSize: { xs: '2rem', md: '4rem' }
                             }}
                         >
+                            Your Curriculum
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            color="text.secondary"
+                            sx={{
+                                maxWidth: '600px',
+                                mx: 'auto',
+                                mb: 6,
+                                lineHeight: 1.6,
+                                fontWeight: 400
+                            }}
+                        >
+                            Master the foundations of computer science and software engineering with our structured learning paths.
+                        </Typography>
+
+                        {/* AI Strategy Display */}
+                        {aiStrategy && (
                             <div>
-                                <Typography
-                                    variant="h2"
-                                    component="h1"
+                                <Box
                                     sx={{
-                                        fontWeight: 800,
-                                        mb: 2,
+                                        maxWidth: '700px',
+                                        mx: 'auto',
+                                        mb: 4,
+                                        p: { xs: 1.5, md: 1.5 },
+                                        pr: { xs: 1.5, md: 2.5 },
+                                        borderRadius: '16px',
                                         background: theme.palette.mode === 'dark'
-                                            ? 'linear-gradient(135deg, #fff 30%, #aaa 100%)'
-                                            : 'linear-gradient(135deg, #1a1a1a 30%, #4a4a4a 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        fontSize: { xs: '2rem', md: '4rem' }
+                                            ? 'rgba(10, 132, 255, 0.1)'
+                                            : 'rgba(10, 132, 255, 0.05)',
+                                        border: '1px solid',
+                                        borderColor: theme.palette.mode === 'dark'
+                                            ? 'rgba(10, 132, 255, 0.2)'
+                                            : 'rgba(10, 132, 255, 0.1)',
+                                        display: 'flex',
+                                        alignItems: 'start',
+                                        gap: 2,
+                                        textAlign: 'left'
                                     }}
                                 >
-                                    Your Curriculum
-                                </Typography>
+                                    <Box sx={{ mt: 0.5 }}>
+                                        <Psychology fontSize="medium" sx={{ color: '#0a84ff' }} />
+                                    </Box>
+                                    <Box>
+                                        <Typography variant="subtitle2" sx={{ color: '#0a84ff', fontWeight: 700, mb: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                                            AI Learning Strategy
+                                        </Typography>
+                                        <Typography variant="body2" color="text.primary" sx={{ lineHeight: 1.6 }}>
+                                            {aiStrategy}
+                                        </Typography>
+                                    </Box>
+                                </Box>
                             </div>
+                        )}
+                        {nextRecommendation && (
                             <div>
-                                <Typography
-                                    variant="h6"
-                                    color="text.secondary"
+                                <Box
                                     sx={{
-                                        maxWidth: '600px',
+                                        maxWidth: '800px',
                                         mx: 'auto',
                                         mb: 6,
-                                        lineHeight: 1.6,
-                                        fontWeight: 400
+                                        p: 3,
+                                        borderRadius: '32px',
+                                        background: theme.palette.mode === 'dark'
+                                            ? 'rgba(30, 30, 30, 0.4)'
+                                            : 'rgba(255, 255, 255, 0.65)',
+                                        border: '1px solid',
+                                        borderColor: theme.palette.mode === 'dark'
+                                            ? 'rgba(255, 255, 255, 0.08)'
+                                            : 'rgba(255, 255, 255, 0.5)',
+                                        backdropFilter: 'blur(10px)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        width: { xs: '100%', md: 'auto' },
+                                        justifyContent: 'center',
+                                        mt: { xs: 1, md: 0 },
+                                        flexDirection: { xs: 'column', sm: 'row' },
+                                        gap: 2,
+                                        boxShadow: theme.palette.mode === 'dark'
+                                            ? '0 20px 40px rgba(0, 0, 0, 0.4)'
+                                            : '0 20px 40px rgba(99, 102, 241, 0.15)'
                                     }}
                                 >
-                                    Master the foundations of computer science and software engineering with our structured learning paths.
-                                </Typography>
-                            </div>
-
-                            {/* AI Strategy Display */}
-                            {aiStrategy && (
-                                <div>
-                                    <Box
-                                        sx={{
-                                            maxWidth: '700px',
-                                            mx: 'auto',
-                                            mb: 4,
-                                            p: { xs: 1.5, md: 1.5 },
-                                            pr: { xs: 1.5, md: 2.5 },
-                                            borderRadius: '16px',
-                                            background: theme.palette.mode === 'dark'
-                                                ? 'rgba(10, 132, 255, 0.1)'
-                                                : 'rgba(10, 132, 255, 0.05)',
-                                            border: '1px solid',
-                                            borderColor: theme.palette.mode === 'dark'
-                                                ? 'rgba(10, 132, 255, 0.2)'
-                                                : 'rgba(10, 132, 255, 0.1)',
-                                            display: 'flex',
-                                            alignItems: 'start',
-                                            gap: 2,
-                                            textAlign: 'left'
-                                        }}
-                                    >
-                                        <Box sx={{ mt: 0.5 }}>
-                                            <Psychology fontSize="medium" sx={{ color: '#0a84ff' }} />
-                                        </Box>
-                                        <Box>
-                                            <Typography variant="subtitle2" sx={{ color: '#0a84ff', fontWeight: 700, mb: 0.5, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                                AI Learning Strategy
-                                            </Typography>
-                                            <Typography variant="body2" color="text.primary" sx={{ lineHeight: 1.6 }}>
-                                                {aiStrategy}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                </div>
-                            )}
-                            {nextRecommendation && (
-                                <div>
-                                    <Box
-                                        sx={{
-                                            maxWidth: '800px',
-                                            mx: 'auto',
-                                            mb: 6,
-                                            p: 3,
-                                            borderRadius: '32px',
-                                            background: theme.palette.mode === 'dark'
-                                                ? 'rgba(30, 30, 30, 0.4)'
-                                                : 'rgba(255, 255, 255, 0.65)',
-                                            border: '1px solid',
-                                            borderColor: theme.palette.mode === 'dark'
-                                                ? 'rgba(255, 255, 255, 0.08)'
-                                                : 'rgba(255, 255, 255, 0.5)',
-                                            backdropFilter: 'blur(10px)',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            width: { xs: '100%', md: 'auto' },
-                                            justifyContent: 'center',
-                                            mt: { xs: 1, md: 0 },
-                                            flexDirection: { xs: 'column', sm: 'row' },
-                                            gap: 2,
-                                            boxShadow: theme.palette.mode === 'dark'
-                                                ? '0 20px 40px rgba(0, 0, 0, 0.4)'
-                                                : '0 20px 40px rgba(99, 102, 241, 0.15)'
-                                        }}
-                                    >
-                                        <Box sx={{ textAlign: 'left', flex: 1 }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                                                <Chip
-                                                    label="AI Recommended Next Step"
-                                                    size="small"
-                                                    sx={{
-                                                        bgcolor: '#6366f1',
-                                                        color: '#fff',
-                                                        fontWeight: 700,
-                                                        fontSize: '0.75rem'
-                                                    }}
-                                                />
-                                            </Box>
-                                            <Typography variant="h5" fontWeight={700} sx={{ mb: 0.5 }}>
-                                                {nextRecommendation.name}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary">
-                                                {nextRecommendation.description}
-                                            </Typography>
-                                        </Box>
-                                        <Button
-                                            component={Link}
-                                            to={nextRecommendation.customLink || `/topic/${nextRecommendation.slug}`}
-                                            variant="contained"
-                                            size="large"
-                                            endIcon={<ArrowForward />}
-                                            sx={{
-                                                borderRadius: '9999px',
-                                                bgcolor: '#6366f1',
-                                                whiteSpace: 'nowrap',
-                                                flexShrink: 0,
-                                                '&:hover': {
-                                                    bgcolor: '#4f46e5',
-                                                    transform: 'translateY(-2px)',
-                                                    boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
-                                                }
-                                            }}
-                                        >
-                                            Start Learning
-                                        </Button>
-                                    </Box>
-                                </div>
-                            )}
-                            <Box id="dashboard-header" sx={{ mb: 6 }}>
-                                <GreetingHeader user={user} streak={stats} />
-
-                                <Grid container spacing={3} sx={{ mb: 4 }}>
-                                    {/* Primary Recommendation (AI or Logical) */}
-                                    {(aiSuggestion || nextRecommendation) && (
-                                        <Grid item xs={12} md={7} lg={8}>
-                                            <SmartSuggestion
-                                                suggestion={aiSuggestion || nextRecommendation}
-                                                type={aiSuggestion ? "ai" : "next"}
+                                    <Box sx={{ textAlign: 'left', flex: 1 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                                            <Chip
+                                                label="AI Recommended Next Step"
+                                                size="small"
+                                                sx={{
+                                                    bgcolor: '#6366f1',
+                                                    color: '#fff',
+                                                    fontWeight: 700,
+                                                    fontSize: '0.75rem'
+                                                }}
                                             />
-                                        </Grid>
-                                    )}
-
-                                    {/* Secondary / Resume (Placeholder for now, or last active) */}
-                                    {/* We can add a "Resume" card here later if we track last_active_topic separately */}
-                                </Grid>
-
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                                    <Box>
-                                        <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
-                                            Your Path
+                                        </Box>
+                                        <Typography variant="h5" fontWeight={700} sx={{ mb: 0.5 }}>
+                                            {nextRecommendation.name}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            {learningPaths[selectedPath]?.name || 'Custom Path'}
+                                            {nextRecommendation.description}
                                         </Typography>
                                     </Box>
                                     <Button
-                                        onClick={() => setShowOnboarding(true)}
-                                        variant="outlined"
-                                        size="small"
-                                        sx={{ borderRadius: '12px', textTransform: 'none' }}
+                                        component={Link}
+                                        to={nextRecommendation.customLink || `/topic/${nextRecommendation.slug}`}
+                                        variant="contained"
+                                        size="large"
+                                        endIcon={<ArrowForward />}
+                                        sx={{
+                                            borderRadius: '9999px',
+                                            bgcolor: '#6366f1',
+                                            whiteSpace: 'nowrap',
+                                            flexShrink: 0,
+                                            '&:hover': {
+                                                bgcolor: '#4f46e5',
+                                                transform: 'translateY(-2px)',
+                                                boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)'
+                                            }
+                                        }}
                                     >
-                                        Change Path
+                                        Start Learning
                                     </Button>
                                 </Box>
+                            </div>
+                        )}
+                        <Box id="dashboard-header" sx={{ mb: 6 }}>
+                            <GreetingHeader user={user} streak={stats} />
 
-                            </Box>
-                        </Box>
-                        <div>
-                            <Box
-                                sx={{
-                                    mb: 4,
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    gap: 2,
-                                    flexDirection: { xs: 'column', sm: 'row' }
-                                }}
-                            >
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, px: 3, borderRadius: '9999px', bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider' }}>
-                                    <Typography variant="body2" color="text.secondary" fontWeight={600}>
-                                        Current Path:
+                            <Grid container spacing={3} sx={{ mb: 4 }}>
+                                {/* Primary Recommendation (AI or Logical) */}
+                                {(aiSuggestion || nextRecommendation) && (
+                                    <Grid item xs={12} md={7} lg={8}>
+                                        <SmartSuggestion
+                                            suggestion={aiSuggestion || nextRecommendation}
+                                            type={aiSuggestion ? "ai" : "next"}
+                                        />
+                                    </Grid>
+                                )}
+
+                                {/* Secondary / Resume (Placeholder for now, or last active) */}
+                                {/* We can add a "Resume" card here later if we track last_active_topic separately */}
+                            </Grid>
+
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                                <Box>
+                                    <Typography variant="h5" sx={{ fontWeight: 700, mb: 0.5 }}>
+                                        Your Path
                                     </Typography>
-                                    <Typography variant="body1" fontWeight={700} color="text.primary">
-                                        {learningPaths[selectedPath]?.name || 'Unknown Path'}
+                                    <Typography variant="body2" color="text.secondary">
+                                        {learningPaths[selectedPath]?.name || 'Custom Path'}
                                     </Typography>
                                 </Box>
-                                {selectedPath !== 'all' && (
-                                    <Chip
-                                        label={`${filteredTopics.length} topics`}
-                                        size="small"
-                                        sx={{
-                                            bgcolor: '#5e5ce620',
-                                            color: '#5e5ce6',
-                                            fontWeight: 600
-                                        }}
-                                    />
-                                )}
                                 <Button
-                                    variant="contained"
-                                    size="medium"
                                     onClick={() => setShowOnboarding(true)}
-                                    sx={{
-                                        borderRadius: '9999px',
-                                        textTransform: 'none',
-                                        fontWeight: 600,
-                                        px: 3,
-                                        background: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                                        color: theme.palette.mode === 'dark' ? '#000' : '#fff',
-                                        '&:hover': {
-                                            background: theme.palette.mode === 'dark' ? '#e0e0e0' : '#333'
-                                        }
-                                    }}
+                                    variant="outlined"
+                                    size="small"
+                                    sx={{ borderRadius: '12px', textTransform: 'none' }}
                                 >
                                     Change Path
                                 </Button>
                             </Box>
-                        </div>
-                        <Box
+
+                        </Box>
+                    </div>
+                </Box>
+                <div>
+                    <Box
+                        sx={{
+                            mb: 4,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 2,
+                            flexDirection: { xs: 'column', sm: 'row' }
+                        }}
+                    >
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 1, px: 3, borderRadius: '9999px', bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider' }}>
+                            <Typography variant="body2" color="text.secondary" fontWeight={600}>
+                                Current Path:
+                            </Typography>
+                            <Typography variant="body1" fontWeight={700} color="text.primary">
+                                {learningPaths[selectedPath]?.name || 'Unknown Path'}
+                            </Typography>
+                        </Box>
+                        {selectedPath !== 'all' && (
+                            <Chip
+                                label={`${filteredTopics.length} topics`}
+                                size="small"
+                                sx={{
+                                    bgcolor: '#5e5ce620',
+                                    color: '#5e5ce6',
+                                    fontWeight: 600
+                                }}
+                            />
+                        )}
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            onClick={() => setShowOnboarding(true)}
                             sx={{
-                                display: 'grid',
-                                gridTemplateColumns: {
-                                    xs: '1fr',
-                                    sm: 'repeat(2, 1fr)',
-                                    md: 'repeat(4, 1fr)',
-                                    lg: 'repeat(4, 1fr)',
-                                    xl: 'repeat(4, 1fr)'
-                                },
-                                gap: 3,
-                                maxWidth: '100%',
-                                mx: 'auto',
-                                px: 2
+                                borderRadius: '9999px',
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                px: 3,
+                                background: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                                color: theme.palette.mode === 'dark' ? '#000' : '#fff',
+                                '&:hover': {
+                                    background: theme.palette.mode === 'dark' ? '#e0e0e0' : '#333'
+                                }
                             }}
                         >
-                            {selectedPath === 'all' && (
-                                <>
-                                    <Box sx={{ display: 'flex', height: 'auto' }}>
-                                        <div>
-                                            <TopicCard
-                                                topic={{
-                                                    _id: 'dsa-agg',
-                                                    name: 'Algorithms & Data Structures',
-                                                    description: 'Master Algorithms, Data Structures and the Blind 75 list.',
-                                                    slug: 'algorithms',
-                                                    categoryCount: 3,
-                                                    progress: 0
-                                                }}
-                                                customLink="/dsa"
-                                            />
-                                        </div>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', height: 'auto' }}>
-                                        <div>
-                                            <TopicCard
-                                                topic={{
-                                                    _id: 'cs-funds-agg',
-                                                    name: 'CS Fundamentals',
-                                                    description: 'Operating Systems and Networking theories.',
-                                                    slug: 'operating-systems',
-                                                    icon: '💻',
-                                                    categoryCount: 2,
-                                                    progress: 0
-                                                }}
-                                                customLink="/cs-fundamentals"
-                                            />
-                                        </div>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', height: 'auto' }}>
-                                        <div>
-                                            <TopicCard
-                                                topic={{
-                                                    _id: 'sys-design-agg',
-                                                    name: 'System Design & Architecture',
-                                                    description: 'Scalability, API Design, Security, and Reliability.',
-                                                    slug: 'system-design',
-                                                    icon: '🏗️',
-                                                    categoryCount: 6,
-                                                    progress: 0
-                                                }}
-                                                customLink="/system-design"
-                                            />
-                                        </div>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', height: 'auto' }}>
-                                        <div>
-                                            <TopicCard
-                                                topic={{
-                                                    _id: 'eng-practices-agg',
-                                                    name: 'Engineering Practices',
-                                                    description: 'Testing, DevOps, Code Quality, and Product Thinking.',
-                                                    slug: 'devops-basics',
-                                                    icon: '🚀',
-                                                    categoryCount: 4,
-                                                    progress: 0
-                                                }}
-                                                customLink="/engineering-practices"
-                                            />
-                                        </div>
-                                    </Box>
-                                </>
-                            )}
-                            {(() => {
-                                const visible = filteredTopics.filter(t => {
-                                    if (t.isGroup) return true;
-                                    const HIDDEN_CHILDREN = [
-                                        'algorithms', 'data-structures', 'blind-75', 'dsa',
-                                        'operating-systems', 'networking',
-                                        'system-design', 'api-design', 'security-engineering', 'reliability-observability', 'caching-performance', 'concurrency', 'concurrency-async',
-                                        'testing-strategy', 'devops-basics', 'code-quality', 'product-thinking'
-                                    ];
-                                    const CORE_GROUPS = ['algorithms-data-structures', 'cs-fundamentals', 'system-design-architecture', 'engineering-practices'];
-                                    return !HIDDEN_CHILDREN.includes(t.slug) && !CORE_GROUPS.includes(t.slug);
-                                }).slice(0, visibleCount);
-
-                                return visible.map((topic, index) => (
-                                    // Use LazyTopicCard for better performance
-                                    <LazyTopicCard
-                                        key={topic._id}
-                                        topic={topic}
-                                        index={index}
-                                        reduced={lowPower || prefersReducedMotion}
-                                        customLink={topic.customLink}
-                                    />
-                                ));
-                            })()}
-                        </Box>
-                        {topics.length === 0 && !loading && !error && (
-                            <Box sx={{ textAlign: 'center', py: 8 }}>
-                                <Typography variant="h5" color="text.secondary">
-                                    No topics available yet
-                                </Typography>
-                            </Box>
-                        )}
-
-                        {filteredTopics.length > visibleCount && (
-                            <Box sx={{ textAlign: 'center', mt: 4 }}>
-                                <Button variant="outlined" onClick={() => setVisibleCount(v => v + 12)}>
-                                    Show more topics
-                                </Button>
-                            </Box>
-                        )}
+                            Change Path
+                        </Button>
                     </Box>
-                </Container>
-            </Box>
-        </StaticBackground>
+                </div>
+                <Box
+                    sx={{
+                        display: 'grid',
+                        gridTemplateColumns: {
+                            xs: '1fr',
+                            sm: 'repeat(2, 1fr)',
+                            md: 'repeat(4, 1fr)',
+                            lg: 'repeat(4, 1fr)',
+                            xl: 'repeat(4, 1fr)'
+                        },
+                        gap: 3,
+                        maxWidth: '100%',
+                        mx: 'auto',
+                        px: 2
+                    }}
+                >
+                    {selectedPath === 'all' && (
+                        <>
+                            <Box sx={{ display: 'flex', height: 'auto' }}>
+                                <div>
+                                    <TopicCard
+                                        topic={{
+                                            _id: 'dsa-agg',
+                                            name: 'Algorithms & Data Structures',
+                                            description: 'Master Algorithms, Data Structures and the Blind 75 list.',
+                                            slug: 'algorithms',
+                                            categoryCount: 3,
+                                            progress: 0
+                                        }}
+                                        customLink="/dsa"
+                                    />
+                                </div>
+                            </Box>
+                            <Box sx={{ display: 'flex', height: 'auto' }}>
+                                <div>
+                                    <TopicCard
+                                        topic={{
+                                            _id: 'cs-funds-agg',
+                                            name: 'CS Fundamentals',
+                                            description: 'Operating Systems and Networking theories.',
+                                            slug: 'operating-systems',
+                                            icon: '💻',
+                                            categoryCount: 2,
+                                            progress: 0
+                                        }}
+                                        customLink="/cs-fundamentals"
+                                    />
+                                </div>
+                            </Box>
+                            <Box sx={{ display: 'flex', height: 'auto' }}>
+                                <div>
+                                    <TopicCard
+                                        topic={{
+                                            _id: 'sys-design-agg',
+                                            name: 'System Design & Architecture',
+                                            description: 'Scalability, API Design, Security, and Reliability.',
+                                            slug: 'system-design',
+                                            icon: '🏗️',
+                                            categoryCount: 6,
+                                            progress: 0
+                                        }}
+                                        customLink="/system-design"
+                                    />
+                                </div>
+                            </Box>
+                            <Box sx={{ display: 'flex', height: 'auto' }}>
+                                <div>
+                                    <TopicCard
+                                        topic={{
+                                            _id: 'eng-practices-agg',
+                                            name: 'Engineering Practices',
+                                            description: 'Testing, DevOps, Code Quality, and Product Thinking.',
+                                            slug: 'devops-basics',
+                                            icon: '🚀',
+                                            categoryCount: 4,
+                                            progress: 0
+                                        }}
+                                        customLink="/engineering-practices"
+                                    />
+                                </div>
+                            </Box>
+                        </>
+                    )}
+                    {(() => {
+                        const visible = filteredTopics.filter(t => {
+                            if (t.isGroup) return true;
+                            const HIDDEN_CHILDREN = [
+                                'algorithms', 'data-structures', 'blind-75', 'dsa',
+                                'operating-systems', 'networking',
+                                'system-design', 'api-design', 'security-engineering', 'reliability-observability', 'caching-performance', 'concurrency', 'concurrency-async',
+                                'testing-strategy', 'devops-basics', 'code-quality', 'product-thinking'
+                            ];
+                            const CORE_GROUPS = ['algorithms-data-structures', 'cs-fundamentals', 'system-design-architecture', 'engineering-practices'];
+                            return !HIDDEN_CHILDREN.includes(t.slug) && !CORE_GROUPS.includes(t.slug);
+                        }).slice(0, visibleCount);
+
+                        return visible.map((topic, index) => (
+                            // Use LazyTopicCard for better performance
+                            <LazyTopicCard
+                                key={topic._id}
+                                topic={topic}
+                                index={index}
+                                reduced={lowPower || prefersReducedMotion}
+                                customLink={topic.customLink}
+                            />
+                        ));
+                    })()}
+                </Box>
+                {topics.length === 0 && !loading && !error && (
+                    <Box sx={{ textAlign: 'center', py: 8 }}>
+                        <Typography variant="h5" color="text.secondary">
+                            No topics available yet
+                        </Typography>
+                    </Box>
+                )}
+
+                {filteredTopics.length > visibleCount && (
+                    <Box sx={{ textAlign: 'center', mt: 4 }}>
+                        <Button variant="outlined" onClick={() => setVisibleCount(v => v + 12)}>
+                            Show more topics
+                        </Button>
+                    </Box>
+                )}
+            </Container>
+        </Box>
     );
 };
 

@@ -18,23 +18,32 @@ const TopicCard = (props) => {
     const progress = topic.progress || 0;
     const topicColor = getTopicColor(topic.slug, isDark);
 
-    // Shared card base styles - NO BLUR
+    // Shared card base styles - GLASS EFFECT
     const cardBase = {
         textDecoration: 'none',
-        borderRadius: '20px',
-        background: isDark ? '#1a1a1f' : '#ffffff',
+        borderRadius: '24px',
+        // Glass background
+        background: isDark
+            ? 'rgba(30, 30, 30, 0.4)'
+            : 'rgba(255, 255, 255, 0.65)',
+        backdropFilter: reduced ? 'none' : 'blur(10px)',
         border: '1px solid',
-        borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
-        boxShadow: isDark
-            ? '0 4px 20px rgba(0,0,0,0.3)'
-            : '0 4px 20px rgba(0,0,0,0.06)',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+        borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.5)',
+        boxShadow: reduced
+            ? '0 6px 14px rgba(0,0,0,0.06)'
+            : (isDark
+                ? '0 10px 30px rgba(0,0,0,0.2)'
+                : '0 10px 30px rgba(31, 38, 135, 0.05)'),
+        transition: 'all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1)',
+        overflow: 'hidden',
+        position: 'relative',
         '&:hover': {
-            transform: 'translateY(-6px)',
+            transform: 'translateY(-5px)',
             boxShadow: isDark
-                ? `0 12px 32px rgba(0,0,0,0.4)`
-                : `0 12px 32px ${topicColor}15`,
-            borderColor: `${topicColor}40`,
+                ? `0 20px 40px rgba(0,0,0,0.4)`
+                : `0 20px 40px ${topicColor}20`,
+            borderColor: `${topicColor}50`,
+            bgcolor: isDark ? 'rgba(30, 30, 30, 0.6)' : 'rgba(255, 255, 255, 0.8)',
         }
     };
 

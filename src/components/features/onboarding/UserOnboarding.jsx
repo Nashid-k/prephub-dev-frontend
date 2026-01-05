@@ -23,9 +23,7 @@ import {
     Rocket,
     WorkOutline
 } from '@mui/icons-material';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import api from '../../../services/api';
 
 // Goals options
 const GOALS = [
@@ -93,7 +91,7 @@ const UserOnboarding = ({ open, onComplete }) => {
         const timer = setTimeout(async () => {
             setUsernameStatus({ checking: true, available: null, message: '' });
             try {
-                const res = await axios.post(`${API_URL}/onboarding/check-username`, { username });
+                const res = await api.post('/onboarding/check-username', { username });
                 setUsernameStatus({
                     checking: false,
                     available: res.data.available,
@@ -142,20 +140,14 @@ const UserOnboarding = ({ open, onComplete }) => {
     const handleSubmit = async () => {
         setIsSubmitting(true);
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.post(
-                `${API_URL}/onboarding/complete`,
-                {
-                    username,
-                    firstName: firstName.trim(),
-                    lastName: lastName.trim(),
-                    goals: selectedGoals,
-                    skills: selectedSkills
-                },
-                {
-                    headers: { Authorization: `Bearer ${token}` }
-                }
-            );
+            // api.post automatically adds auth token
+            const res = await api.post('/onboarding/complete', {
+                username,
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                goals: selectedGoals,
+                skills: selectedSkills
+            });
 
             if (res.data.success) {
                 onComplete(res.data.user);
