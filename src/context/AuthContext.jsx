@@ -11,8 +11,8 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [experienceLevel, setExperienceLevel] = useState('beginner'); // Default to beginner
-    const [role, setRole] = useState(null); // Add role state
+    const [experienceLevel, setExperienceLevel] = useState('beginner');
+    const [role, setRole] = useState(null);
 
     const getApiUrl = () => {
         const url = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }) => {
         const storedToken = localStorage.getItem('token');
         const storedUser = localStorage.getItem('user');
 
-        // Load experience level and role from onboarding data
         try {
             const onboardingData = JSON.parse(localStorage.getItem('prephub_onboarding') || '{}');
             if (onboardingData.level) {
@@ -51,13 +50,20 @@ export const AuthProvider = ({ children }) => {
                 tokenId: googleResponse.credential
             });
 
-            const { token, learningPreferences, ...userData } = res.data;
+            const { token: authToken, learningPreferences, ...userData } = res.data;
 
-            setToken(token);
-            setUser({ ...userData, learningPreferences });
+            // Include onboardingCompleted in user data
+            const fullUserData = {
+                ...userData,
+                learningPreferences,
+                onboardingCompleted: userData.onboardingCompleted || false
+            };
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify({ ...userData, learningPreferences }));
+            setToken(authToken);
+            setUser(fullUserData);
+
+            localStorage.setItem('token', authToken);
+            localStorage.setItem('user', JSON.stringify(fullUserData));
 
             // Sync local path preferences to server on login
             const localPathConfig = JSON.parse(localStorage.getItem('prephub_ai_path_config') || 'null');
@@ -66,16 +72,19 @@ export const AuthProvider = ({ children }) => {
                     await axios.post(
                         `${API_URL}/auth/sync-preferences`,
                         { localPreferences: localPathConfig },
-                        { headers: { Authorization: `Bearer ${token}` } }
+                        { headers: { Authorization: `Bearer ${authToken}` } }
                     );
                 } catch (e) {
                     console.warn('Path sync failed:', e.message);
                 }
             }
 
-            syncBookmarks(token);
+            syncBookmarks(authToken);
 
-            toast.success(`Welcome back, ${userData.name}!`);
+            // Only show welcome if onboarding is complete
+            if (fullUserData.onboardingCompleted) {
+                toast.success(`Welcome back, ${userData.name}!`);
+            }
         } catch (error) {
             console.error('Login Failed:', error);
             toast.error('Login failed. Please try again.');
@@ -87,8 +96,14 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        // Keep local path preferences for guest experience
         toast.success('Logged out successfully');
+    };
+
+    // Update user after onboarding completion
+    const updateUser = (updatedUserData) => {
+        const newUserData = { ...user, ...updatedUserData };
+        setUser(newUserData);
+        localStorage.setItem('user', JSON.stringify(newUserData));
     };
 
     const syncBookmarks = async (authToken) => {
@@ -107,10 +122,20 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, loading, experienceLevel, role }}>
+        <AuthContext.Provider value={{
+            user,
+            token,
+            login,
+            logout,
+            loading,
+            experienceLevel,
+            role,
+            updateUser
+        }}>
             <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                 {children}
             </GoogleOAuthProvider>
         </AuthContext.Provider>
     );
 };
+

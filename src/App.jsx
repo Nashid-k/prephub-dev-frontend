@@ -34,9 +34,10 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { initAnalytics, trackPageView } from './services/analytics';
 // useLocation imported above
 
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { LoaderProvider } from './context/LoaderContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import UserOnboarding from './components/features/onboarding/UserOnboarding';
 
 function App() {
     return (
@@ -52,7 +53,28 @@ function App() {
 
 import useJourneyStore from './stores/useJourneyStore';
 
-import { SocketProvider } from './context/SocketContext'; // Import SocketProvider
+import { SocketProvider } from './context/SocketContext';
+
+// Check if user needs onboarding
+function OnboardingCheck() {
+    const { user, updateUser } = useAuth();
+
+    // Show onboarding if user is logged in but hasn't completed onboarding
+    const showOnboarding = user && !user.onboardingCompleted;
+
+    const handleOnboardingComplete = (updatedUser) => {
+        updateUser(updatedUser);
+    };
+
+    if (!showOnboarding) return null;
+
+    return (
+        <UserOnboarding
+            open={showOnboarding}
+            onComplete={handleOnboardingComplete}
+        />
+    );
+}
 
 function AppContent() {
     const { theme } = useTheme();
@@ -73,6 +95,7 @@ function AppContent() {
                     <AuthProvider>
                         <SocketProvider>
                             <AnalyticsWrapper />
+                            <OnboardingCheck />
                             <div className="App">
                                 <Navbar />
                                 <React.Suspense fallback={<GlobalLoader fullScreen />}>
