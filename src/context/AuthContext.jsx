@@ -14,6 +14,11 @@ export const AuthProvider = ({ children }) => {
     const [experienceLevel, setExperienceLevel] = useState('beginner'); // Default to beginner
     const [role, setRole] = useState(null); // Add role state
 
+    // DEBUG: Check what Client ID is actually loaded
+    useEffect(() => {
+        console.log("DEBUG: Configured Google Client ID:", import.meta.env.VITE_GOOGLE_CLIENT_ID);
+    }, []);
+
     const getApiUrl = () => {
         const url = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
         return url.endsWith('/api') ? url : `${url}/api`;
