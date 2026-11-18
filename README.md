@@ -1,45 +1,56 @@
-<!-- ══════════════════════════════════════════════════════════════════ -->
-<!--                     NASHID K  —  PREPHUB FRONTEND                  -->
-<!-- ══════════════════════════════════════════════════════════════════ -->
+# PrepHub — Collaborative Coding Workspace (Frontend)
 
-# 💻 PrepHub Frontend — Collaborative Monaco Code Workspace
+PrepHub's frontend is a React application for coding practice and learning workflows. It brings together a Monaco-based editor, collaborative editing integrations, progress-oriented interfaces and API-backed learning features.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/React-18.x-61DAFB?style=flat-square&logo=react" alt="React" />
-  &nbsp;
-  <img src="https://img.shields.io/badge/Vite-5.x-646CFF?style=flat-square&logo=vite" alt="Vite" />
-  &nbsp;
-  <img src="https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?style=flat-square&logo=tailwindcss" alt="Tailwind" />
-  &nbsp;
-  <img src="https://img.shields.io/badge/Collab-Yjs%20Client-blue?style=flat-square" alt="Yjs" />
-  &nbsp;
-  <img src="https://img.shields.io/badge/Testing-Vitest-purple?style=flat-square&logo=vitest" alt="Vitest" />
-</p>
+## Frontend capabilities
 
-<p align="center">
-  <strong>Intelligent client interface for PrepHub, featuring shared editor rooms, sandbox execution outputs, and Vitest suite validations.</strong>
-</p>
+- Monaco Editor integration for code editing
+- Collaborative editing foundations using Yjs and WebSocket client libraries
+- Learning and practice interfaces backed by the PrepHub API
+- Google OAuth client integration
+- Data fetching with TanStack Query and local persistence with Dexie
+- State management with Zustand
+- Syntax highlighting, charts and guided UI interactions
 
----
+## Stack
 
-## 📌 Project Overview
-PrepHub Client connects to the collaborative WebSocket API, rendering an advanced coding workbench with Monaco editor setups, real-time participant cursors, and AI reviews.
+- React 18 and Vite 6
+- React Router 7
+- Monaco Editor and `@monaco-editor/react`
+- Yjs, `y-websocket` and Socket.IO client
+- TanStack Query, Zustand and Dexie
+- Material UI, Emotion and Framer Motion
+- Vitest
 
-### ✨ Features
-*   **Shared Coding Room:** Powered by Yjs provider and Monaco editor.
-*   **Interactive AI Mentorship panel:** Custom panels to query Gemini regarding compiler output errors.
-*   **Vitest Suite:** Automated client-side utilities test coverage.
+## Run locally
 
----
+```bash
+git clone https://github.com/Nashid-k/prephub-dev-frontend.git
+cd prephub-dev-frontend
+npm install
+cp .env.example .env
+npm run dev
+```
 
-## ⚙️ Installation
-1. Clone the project:
-   ```bash
-   git clone https://github.com/Nashid-k/prephub-dev-frontend.git
-   cd prephub-dev-frontend
-   ```
-2. Run `npm install`
-3. Boot the local development server:
-   ```bash
-   npm run dev
-   ```
+## Environment
+
+| Variable | Purpose |
+| --- | --- |
+| `VITE_API_URL` | Backend API base URL |
+| `GOOGLE_CLIENT_ID` | Google OAuth client identifier used by the app configuration |
+| `VITE_GA_MEASUREMENT_ID` | Optional Google Analytics measurement ID |
+
+Use local values in `.env`. Do not commit credentials or machine-specific configuration. Vite exposes variables prefixed with `VITE_` to browser code, so those values must never contain private secrets.
+
+## Scripts
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Build the production frontend |
+| `npm run preview` | Preview the production build |
+| `npm test` | Run Vitest |
+
+## Related repository
+
+[PrepHub backend](https://github.com/Nashid-k/prephub-dev-backend) contains the API, realtime services and code-runner components.
